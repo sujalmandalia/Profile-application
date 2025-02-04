@@ -1,0 +1,21 @@
+[project]
+name = "people-event-sourcing"
+version = "0.1.0"
+description = "This is a demo application for practicing event sourcing"
+authors = [
+    {name = "Sujal Mandalia"}
+]
+readme = "README.md"
+requires-python = ">=3.10,<4.0"
+dependencies = [
+    "eventsourcing (>=9.3.5,<10.0.0)",
+    "python-dotenv (>=1.0.1,<2.0.0)",
+    "psycopg2 (>=2.9.10,<3.0.0)",
+    "psycopg (>=3.2.4,<4.0.0)",
+    "psycopg-pool (>=3.2.4,<4.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
