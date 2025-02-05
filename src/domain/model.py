@@ -3,32 +3,33 @@ from eventsourcing.domain import Aggregate, event
 
 class People(Aggregate):
     @event("PersonCreated")
-    def __init__(self, name: str, age: int, phone_no: str, address: str):
-        self.name = name
-        self.age = age
-        self.phone_no = phone_no
-        self.address = address
+    def __init__(self, person: dict):
+        self.name = person["name"]
+        self.age = person["age"]
+        self.phone_no = person["phone_no"]
+        self.address = person["address"]
         self.is_deleted = False
 
     @event("PersonNameUpdated")
-    def update_name(self, name: str) -> None:
+    def update_name(self, person: dict) -> None:
+        print(person)
         self.check_not_deleted()
-        self.name = name
+        self.name = person["name"]
 
     @event('PersonAgeUpdated')
-    def update_age(self, age: int) -> None:
+    def update_age(self, person: dict) -> None:
         self.check_not_deleted()
-        self.age = age
+        self.age = person["age"]
 
     @event('PersonPhoneUpdated')
-    def update_phone(self, phone_no: str) -> None:
+    def update_phone(self, person: dict) -> None:
         self.check_not_deleted()
-        self.phone_no = phone_no
+        self.phone_no = person["phone_no"]
 
     @event('PersonAddressUpdated')
-    def update_address(self, address: str) -> None:
+    def update_address(self, person: dict) -> None:
         self.check_not_deleted()
-        self.address = address
+        self.address = person["address"]
 
     def check_not_deleted(self):
         if self.is_deleted:
@@ -38,7 +39,7 @@ class People(Aggregate):
             )
 
     @event('PersonDeleted')
-    def delete(self) -> None:
+    def delete(self,person: dict) -> None:
         self.check_not_deleted()
         self.is_deleted = True
 
