@@ -14,14 +14,27 @@ def create_profile(app):
   name = input("Enter the name : ")
   age =  int(input("Enter the age : "))
   phone_no = input("Enter your phone : ")
-  address =  input("Enter your address : ")
-  profile_id = app.addPeople(name,age,phone_no,address)
+  
+  print("Enter address details:")
+  street = input("Street: ")
+  city = input("City: ")
+  state = input("State: ")
+  zip_code = input("Zip Code: ")
+
+  full_address = {
+        "street": street,
+        "city": city,
+        "state": state,
+        "zip_code": zip_code
+  }
+  
+  profile_id = app.addPeople(name,age,phone_no,full_address)
   print(f"The created profile id is {profile_id}")
 
 def get_profile(app):
   profile_id = input("Enter profile id: ")
   profile_details = app.get_profile(profile_id)
-  print(f"Name: {profile_details.name}, age: {profile_details.age}, phone_no: {profile_details.phone_no}, address: {profile_details.address}")
+  print(f"Name: {profile_details.name}, age: {profile_details.age}, phone_no: {profile_details.phone_no}, full_address: {profile_details.full_address}")
 
 def delete_profile(app):
   profile_id = input("Enter your profile id: ")
@@ -48,8 +61,18 @@ def update_phone(app):
   
 def update_address(app):
   profile_id = input("Enter your profile id: ")
-  address = input("Enter age : ")
-  app.update_address(profile_id,address)
+  print("Enter address details:")
+  street = input("Street: ")
+  city = input("City: ")
+  state = input("State: ")
+  zip_code = input("Zip Code: ")
+  full_address = {
+        "street": street,
+        "city": city,
+        "state": state,
+        "zip_code": zip_code
+  }
+  app.update_address(profile_id,full_address)
   print(f"Profile with id {profile_id} updated successfully")
 
 def get_all_profile(app):

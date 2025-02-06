@@ -10,11 +10,11 @@ if TYPE_CHECKING:
 
 
 class PeopleApplication(Application):
-    def addPeople(self, name: str, age: int, phone_no: str, address: str) -> UUID:
+    def addPeople(self, name: str, age: int, phone_no: str, full_address: dict) -> UUID:
         details = {
             "name": name,
             "age": age,
-            "address": address,
+            "full_address": full_address,
             "phone_no": phone_no,
             "is_deleted": False,
         }
@@ -35,7 +35,7 @@ class PeopleApplication(Application):
             details = {
                 "name": name,
                 "age": person.age,
-                "address": person.address,
+                "full_address": person.full_address,
                 "phone_no": person.phone_no,
                 "is_deleted": person.is_deleted,
             }
@@ -52,7 +52,7 @@ class PeopleApplication(Application):
             details = {
                 "name": person.name,
                 "age": age,
-                "address": person.address,
+                "full_address": person.full_address,
                 "phone_no": person.phone_no,
                 "is_deleted": person.is_deleted,
             }
@@ -69,7 +69,7 @@ class PeopleApplication(Application):
             details = {
                 "name": person.name,
                 "age": person.age,
-                "address": person.address,
+                "full_address": person.full_address,
                 "phone_no": phone_no,
                 "is_deleted": person.is_deleted,
             }
@@ -80,13 +80,13 @@ class PeopleApplication(Application):
         except KeyError:
             raise ValueError(f"Person with id {person_id} not found")
 
-    def update_address(self, person_id: UUID, address: str) -> None:
+    def update_address(self, person_id: UUID, full_address: dict) -> None:
         try:
             person = self.get_profile(person_id=person_id)
             details = {
                 "name": person.name,
                 "age": person.age,
-                "address": address,
+                "full_address": full_address,
                 "phone_no": person.phone_no,
                 "is_deleted": person.is_deleted,
             }
@@ -100,11 +100,10 @@ class PeopleApplication(Application):
     def delete_profile(self, person_id: UUID) -> None:
         try:
             person = self.get_profile(person_id=person_id)
-            print(person)
             details = {
                 "name": person.name,
                 "age": person.age,
-                "address": person.address,
+                "full_address": person.full_address,
                 "phone_no": person.phone_no,
                 "is_deleted": True,
             }
@@ -115,18 +114,6 @@ class PeopleApplication(Application):
         except KeyError:
             raise ValueError(f"Person with id {person_id} not found")
 
-    # def get_all_profiles(self):
-    #     query = """
-    #     select distinct originator_id
-    #     from peopleapplication_events;
-    #     """
-    #     cursor.execute(query)
-    #     aggregateIds = cursor.fetchall()
-    #     for aggregates in aggregateIds:
-    #         profile_id = aggregates[0]
-    #         profile_details = self.repository.get(profile_id)
-    #         print(f"Name: {profile_details.name}, age: {profile_details.age}, phone_no: {profile_details.phone_no}, address: {profile_details.address}")
-    #         print("----------------------------------------------------------")
     def get_all_profiles(self):
         query = """
         SELECT p1.originator_id, 
@@ -142,4 +129,10 @@ class PeopleApplication(Application):
         """
         cursor.execute(query)
         result = cursor.fetchall()
-        print(result)
+        for record_id , details in result:
+            print(f"Originator_id: {record_id}")
+            print(f"Name: {details['name']}")
+            print(f"Age: {details['age']}")
+            print(f"Full Address: {details.get('full_address')}")
+            print(f"Phone Number: {details['phone_no']}")
+            print("---------------------------------------")

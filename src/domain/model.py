@@ -6,13 +6,12 @@ class People(Aggregate):
     def __init__(self, person: dict):
         self.name = person["name"]
         self.age = person["age"]
+        self.full_address = person["full_address"]
         self.phone_no = person["phone_no"]
-        self.address = person["address"]
         self.is_deleted = False
 
     @event("PersonNameUpdated")
     def update_name(self, person: dict) -> None:
-        print(person)
         self.check_not_deleted()
         self.name = person["name"]
 
@@ -29,7 +28,7 @@ class People(Aggregate):
     @event('PersonAddressUpdated')
     def update_address(self, person: dict) -> None:
         self.check_not_deleted()
-        self.address = person["address"]
+        self.full_address = person["full_address"]
 
     def check_not_deleted(self):
         if self.is_deleted:
