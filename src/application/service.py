@@ -10,6 +10,8 @@ if TYPE_CHECKING:
 
 
 class PeopleApplication(Application):
+    #To autmatically take the snapshots (will take snapshots after every 5 intervals)
+    snapshotting_intervals = {People: 5}
     def addPeople(self, name: str, age: int, phone_no: str, full_address: dict) -> UUID:
         details = {
             "name": name,

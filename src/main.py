@@ -30,6 +30,7 @@ def create_profile(app):
   
   profile_id = app.addPeople(name,age,phone_no,full_address)
   print(f"The created profile id is {profile_id}")
+  return profile_id
 
 def get_profile(app):
   profile_id = input("Enter profile id: ")
@@ -46,19 +47,20 @@ def update_name(app):
   name = input("Enter Name : ")
   app.update_name(profile_id,name)
   print(f"Profile with id {profile_id} updated successfully")
-  
+  return profile_id
+
 def update_age(app):
   profile_id = input("Enter your profile id: ")
   age = int(input("Enter age : "))
   app.update_age(profile_id,age)
   print(f"Profile with id {profile_id} updated successfully")
-  
+
 def update_phone(app):
   profile_id = input("Enter your profile id: ")
   phone = input("Enter phone : ")
   app.update_phone(profile_id,phone)
   print(f"Profile with id {profile_id} updated successfully")
-  
+
 def update_address(app):
   profile_id = input("Enter your profile id: ")
   print("Enter address details:")
@@ -77,10 +79,10 @@ def update_address(app):
 
 def get_all_profile(app):
   app.get_all_profiles()
-  
+
 def main():
 
-    app = PeopleApplication()
+    app = PeopleApplication(env={"IS_SNAPSHOTTING_ENABLED": "y"})
 
     while True:
         print("\nChoose an option:")
@@ -92,18 +94,23 @@ def main():
         print("6. Update phone number")
         print("7. Update address")
         print("8. Get All Profiles")
-        print("9. Exit")
+        print("9. Get All Snapshots")
+        print("10. Exit")
 
         choice = input("Enter your choice: ")
 
         if choice == "1":
-            create_profile(app)
+            profile_id = create_profile(app)
+            # to manually take the snapshot we need to pass the aggregate_id on each event
+            # app.take_snapshot(profile_id) 
+
         elif choice == "2":
             get_profile(app)
         elif choice == "3":
             delete_profile(app)
         elif choice == "4":
-            update_name(app)
+            profile_id = update_name(app)
+            # app.take_snapshot(profile_id)
         elif choice == "5":
             update_age(app)
         elif choice == "6":
@@ -113,6 +120,11 @@ def main():
         elif choice == "8":
             get_all_profile(app)
         elif choice == "9":
+            profile_id = input("Enter your profile id: ")
+            snapshots = app.snapshots.get(profile_id, desc=True, limit=2)
+            snapshots = list(snapshots)
+            print(snapshots)
+        elif choice == "10":
             print("Exiting... Goodbye!")
             break
         else:
